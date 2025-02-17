@@ -6,10 +6,11 @@ BIN_DIR = bin
 
 # Targets
 all: create_dirs
-
+	
 # Create obj and bin directories
 create_dirs:
 	@mkdir -p $(OBJ_DIR) $(BIN_DIR)
+	@echo "Directories created"
 
 # Clean up the directories (optional)
 clean:
