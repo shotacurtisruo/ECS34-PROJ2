@@ -70,6 +70,6 @@ $(BIN_DIR)/testxml: $(OBJ_DIR)/XMLReader.o $(OBJ_DIR)/XMLWriter.o $(OBJ_DIR)/XML
 
 # Clean up the directories (optional)
 clean:
-	@echo "cleaning junk up"
+	@echo "cleaning up and removing the folders"
 	@rm -rf $(OBJ_DIR) $(BIN_DIR)
 	
