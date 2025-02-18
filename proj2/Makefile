@@ -7,8 +7,8 @@ BIN_DIR = bin
 
 
 # Source files (update if filenames differ)
-SRC = proj1/src/StringUtils.cpp
-TEST_SRC = proj1/testsrc/StringUtilsTest.cpp
+SRC = proj2/src/StringUtils.cpp
+TEST_SRC = proj2/testsrc/StringUtilsTest.cpp
 
 
 # Object files (must match source filenames)
@@ -32,13 +32,13 @@ $(TARGET): $(OBJS)
 
 
 # Compile source files
-$(OBJ_DIR)/%.o: proj1/src/%.cpp
+$(OBJ_DIR)/%.o: proj2/src/%.cpp
 	@echo "didit compile the source files -"
 	@$(CXX) $(CXXFLAGS) -c $< -o $@
 
 
 # Compile test files
-$(OBJ_DIR)/%.o: proj1/testsrc/%.cpp
+$(OBJ_DIR)/%.o: proj2/testsrc/%.cpp
 	@echo "did it compile the test files -"
 	@$(CXX) $(CXXFLAGS) -c $< -o $@
 
