@@ -7,49 +7,50 @@ BIN_DIR = bin
 
 
 # Source files (update if filenames differ)
-SRC = proj2/src/StringUtils.cpp
-TEST_SRC = proj2/testsrc/StringUtilsTest.cpp
 
 
-# Object files (must match source filenames)
-OBJS = $(OBJ_DIR)/StringUtils.o $(OBJ_DIR)/StringUtilsTest.o
+OBJ_DIR = obj
+BIN_DIR = bin
 
 
-# Target executable
-TARGET = $(BIN_DIR)/testutils
+SRC = proj2/src/%.cpp
+TESTSRC = proj2/testsrc/%.cpp
+OBJS = $(OBJ_DIR)/StringUtils.o $(OBJ_DIR)/StringDataSource.o $(OBJ_DIR)/StringDataSink.o $(OBJ_DIR)/DSVReader.o $(OBJ_DIR)/XMLReader.o $(OBJ_DIR)/XMLWriter.o
+TESTOBJS = $(OBJ_DIR)/StringUtilsTest.o $(OBJ_DIR)/StringDataSourceTest.o $(OBJ_DIR)/StringDataSinkTest.o $(OBJ_DIR)/DSVTest.o $(OBJ_DIR)/XMLTest.o
 
 
-# Default target: build and run tests
-all: directories $(TARGET)
-	@echo "Running tests..."
-	@./$(TARGET)
+TARGETS = $(BIN_DIR)/teststrutils $(BIN_DIR)/teststrdatasource $(BIN_DIR)/teststrdatasink $(BIN_DIR)/testdsv $(BIN_DIR)/testxml
 
 
-# Link object files into executable
-$(TARGET): $(OBJS)
-	@echo "did the link .o file to executable work -"
-	@$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)
+test: $(TARGETS)
+    @$(BIN_DIR)/teststrutils
+    @$(BIN_DIR)/teststrdatasource
+    @$(BIN_DIR)/teststrdatasink
+    @$(BIN_DIR)/testdsv
+    @$(BIN_DIR)/testxml
+    @echo "tests worked"
 
 
-# Compile source files
-$(OBJ_DIR)/%.o: proj2/src/%.cpp
-	@echo "didit compile the source files -"
-	@$(CXX) $(CXXFLAGS) -c $< -o $@
 
 
-# Compile test files
-$(OBJ_DIR)/%.o: proj2/testsrc/%.cpp
-	@echo "did it compile the test files -"
-	@$(CXX) $(CXXFLAGS) -c $< -o $@
-
-
-# Create directories
+# make directories
 directories:
-	@mkdir -p $(OBJ_DIR) $(BIN_DIR)
+    @mkdir -p $(OBJ_DIR)
+    @mkdir -p $(BIN_DIR)
+    @echo "directories made"
 
 
-# Clean build artifacts
-clean:
-	@echo "did this work - the cleaning part"
-  #these are just to see which ones ran and worked.
-	@rm -rf $(OBJ_DIR) $(BIN_DIR)
+# compile
+$(OBJ_DIR)/%.o: proj2/src/%.cpp | directories
+    @$(CXX) $(CXXFLAGS) -c $< -o $@
+    @echo "src compiled"
+   
+$(OBJ_DIR)/%.o: proj2/testsrc/%.cpp | directories
+    @$(CXX) $(CXXFLAGS) -c $< -o $@
+    @echo "testsrc compiled"
+
+
+# link object files
+$(BIN_DIR)/teststrutils: $(OBJ_DIR)/StringUtils.o $(OBJ_DIR)/StringUtilsTest.o | directories
+    @$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)
+    @echo "linked teststrutils"
