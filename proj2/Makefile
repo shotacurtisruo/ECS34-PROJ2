@@ -1,7 +1,7 @@
 
 CXX = g++
 CXXFLAGS = -std=c++17 -Wall -g -Iproj1/include -I/opt/homebrew/include
-LDFLAGS = -L/opt/homebrew/lib -lgtest -lgtest_main -lpthread
+LDFLAGS = -L/opt/homebrew/lib -lgtest -lgtest_main -lpthread -lexpat
 OBJ_DIR = obj
 BIN_DIR = bin
 
@@ -23,34 +23,34 @@ TARGETS = $(BIN_DIR)/teststrutils $(BIN_DIR)/teststrdatasource $(BIN_DIR)/testst
 
 
 test: $(TARGETS)
-    @$(BIN_DIR)/teststrutils
-    @$(BIN_DIR)/teststrdatasource
-    @$(BIN_DIR)/teststrdatasink
-    @$(BIN_DIR)/testdsv
-    @$(BIN_DIR)/testxml
-    @echo "tests worked"
+	@$(BIN_DIR)/teststrutils
+	@$(BIN_DIR)/teststrdatasource
+	@$(BIN_DIR)/teststrdatasink
+	@$(BIN_DIR)/testdsv
+	@$(BIN_DIR)/testxml
+	@echo "tests worked"
 
 
 
 
 # make directories
 directories:
-    @mkdir -p $(OBJ_DIR)
-    @mkdir -p $(BIN_DIR)
-    @echo "directories made"
+	@mkdir -p $(OBJ_DIR)
+	@mkdir -p $(BIN_DIR)
+	@echo "directories made"
 
 
 # compile
 $(OBJ_DIR)/%.o: proj2/src/%.cpp | directories
-    @$(CXX) $(CXXFLAGS) -c $< -o $@
-    @echo "src compiled"
+	@$(CXX) $(CXXFLAGS) -c $< -o $@
+	@echo "src compiled"
    
 $(OBJ_DIR)/%.o: proj2/testsrc/%.cpp | directories
-    @$(CXX) $(CXXFLAGS) -c $< -o $@
-    @echo "testsrc compiled"
+	@$(CXX) $(CXXFLAGS) -c $< -o $@
+	@echo "testsrc compiled"
 
 
 # link object files
 $(BIN_DIR)/teststrutils: $(OBJ_DIR)/StringUtils.o $(OBJ_DIR)/StringUtilsTest.o | directories
-    @$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)
-    @echo "linked teststrutils"
+	@$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)
+	@echo "linked teststrutils"
