@@ -1,14 +1,14 @@
 
 CXX = g++
-CXXFLAGS = -std=c++17 -Wall -g -Iinclude -I/src -I/opt/homebrew/include
+CXXFLAGS = -std=c++17 -Wall -g -I./proj2/include -I./proj2/src -I/opt/homebrew/include
 LDFLAGS = -L/opt/homebrew/lib -lgtest -lgtest_main -lpthread -lexpat
 OBJ_DIR = obj
 BIN_DIR = bin
 
 
 
-SRC = src/%.cpp
-TESTSRC = testsrc/%.cpp
+SRC = ./proj2/src/%.cpp
+TESTSRC = ./proj2/testsrc/%.cpp
 OBJS = $(OBJ_DIR)/StringUtils.o $(OBJ_DIR)/StringDataSource.o $(OBJ_DIR)/StringDataSink.o $(OBJ_DIR)/DSVReader.o $(OBJ_DIR)/DSVWriter.o $(OBJ_DIR)/XMLReader.o $(OBJ_DIR)/XMLWriter.o
 TESTOBJS = $(OBJ_DIR)/StringUtilsTest.o $(OBJ_DIR)/StringDataSourceTest.o $(OBJ_DIR)/StringDataSinkTest.o $(OBJ_DIR)/DSVTest.o $(OBJ_DIR)/XMLTest.o
 
@@ -33,11 +33,11 @@ directories:
 
 # compile
 
-$(OBJ_DIR)/%.o: src/%.cpp | directories
+$(OBJ_DIR)/%.o: ./proj2/src/%.cpp | directories
 	@$(CXX) $(CXXFLAGS) -c $< -o $@
 	@echo "src compiled"
 	
-$(OBJ_DIR)/%.o: testsrc/%.cpp | directories
+$(OBJ_DIR)/%.o: ./proj2/testsrc/%.cpp | directories
 	@$(CXX) $(CXXFLAGS) -c $< -o $@
 	@echo "testsrc compiled"
 
