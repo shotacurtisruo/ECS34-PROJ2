@@ -1,28 +1,27 @@
 
 CXX = g++
 CXXFLAGS = -std=c++17 -Wall -g -Iinclude -I/src -I/opt/homebrew/include
-LDFLAGS = -L/opt/homebrew/lib -lgtest -lgtest_main -lpthread -lexpat
+LDFLAGS = -L/opt/homebrew/lib -lgtest -lgtest_main -lpthread -lexpat -L/usr/lib/ -lgtest -lgtest_main
+SRC_DIR = src
+TEST_DIR = testsrc
 OBJ_DIR = obj
 BIN_DIR = bin
 
 
-
-SRC = src/%.cpp
-TESTSRC = testsrc/%.cpp
+SRC = $(wildcard $(SRC_DIR)/*.cpp)
+TESTSRC = $(wildcard $(TEST_DIR)/*.cpp)
 OBJS = $(OBJ_DIR)/StringUtils.o $(OBJ_DIR)/StringDataSource.o $(OBJ_DIR)/StringDataSink.o $(OBJ_DIR)/DSVReader.o $(OBJ_DIR)/DSVWriter.o $(OBJ_DIR)/XMLReader.o $(OBJ_DIR)/XMLWriter.o
 TESTOBJS = $(OBJ_DIR)/StringUtilsTest.o $(OBJ_DIR)/StringDataSourceTest.o $(OBJ_DIR)/StringDataSinkTest.o $(OBJ_DIR)/DSVTest.o $(OBJ_DIR)/XMLTest.o
 
-TARGETS = $(BIN_DIR)/teststrutils $(BIN_DIR)/teststrdatasource $(BIN_DIR)/teststrdatasink $(BIN_DIR)/testdsv $(BIN_DIR)/testxml
 
-all: test
+TARGET = $(BIN_DIR)/tests
 
-test: $(TARGETS)
-	@$(BIN_DIR)/teststrutils
-	@$(BIN_DIR)/teststrdatasource
-	@$(BIN_DIR)/teststrdatasink
-	@$(BIN_DIR)/testdsv
-	@$(BIN_DIR)/testxml
-	@echo "tests worked"
+
+test: all
+	./$(TARGET)
+
+
+all: $(TARGET)
 
 
 # make directories
@@ -31,39 +30,25 @@ directories:
 	@mkdir -p $(BIN_DIR)
 	@echo "directories made"
 
-# compile
 
-$(OBJ_DIR)/%.o: src/%.cpp | directories
+# compile
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp | directories
 	@$(CXX) $(CXXFLAGS) -c $< -o $@
 	@echo "src compiled"
-	
-$(OBJ_DIR)/%.o: testsrc/%.cpp | directories
+   
+$(OBJ_DIR)/%.o: $(TEST_DIR)/%.cpp | directories
 	@$(CXX) $(CXXFLAGS) -c $< -o $@
 	@echo "testsrc compiled"
 
-# link object files
-$(BIN_DIR)/teststrutils: $(OBJ_DIR)/StringUtils.o $(OBJ_DIR)/StringUtilsTest.o | directories
-	@$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)
-	@echo "linked teststrutils"
 
-$(BIN_DIR)/teststrdatasource: $(OBJ_DIR)/StringDataSource.o $(OBJ_DIR)/StringDataSourceTest.o | directories
+# link tests
+$(TARGET): $(OBJS) $(TESTOBJS) | directories
 	@$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)
-	@echo "linked teststrdatasource"
+	@echo "linked tests"
 
-$(BIN_DIR)/teststrdatasink: $(OBJ_DIR)/StringDataSink.o $(OBJ_DIR)/StringDataSinkTest.o | directories
-	@$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)
-	@echo "linked teststrdatasink"
 
-$(BIN_DIR)/testdsv: $(OBJ_DIR)/DSVReader.o $(OBJ_DIR)/DSVWriter.o $(OBJ_DIR)/DSVTest.o | directories
-	@$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)
-	@echo "linked testdsv"
-
-$(BIN_DIR)/testxml: $(OBJ_DIR)/XMLReader.o $(OBJ_DIR)/XMLWriter.o $(OBJ_DIR)/XMLTest.o | directories
-	@$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)
-	@echo "linked testxml"
-
-# clean build 
+# clean build
 clean:
-	@rm -rf $(OBJ_DIR) 
+	@rm -rf $(OBJ_DIR)
 	@rm -rf $(BIN_DIR)
 	@echo "cleaned"

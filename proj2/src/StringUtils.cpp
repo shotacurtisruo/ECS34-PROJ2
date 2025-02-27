@@ -5,7 +5,6 @@ namespace StringUtils
 
     std::string Slice(const std::string &str, ssize_t start, ssize_t end) noexcept
     {
-        // Replace code here
         if (start < 0)
         {
             start = str.size() + start;
@@ -20,154 +19,127 @@ namespace StringUtils
 
     std::string Capitalize(const std::string &str) noexcept
     {
-        // Replace code here
-        std::string result = str;
-        result[0] = toupper(result[0]);
-        for (int i = 1; i < result.length(); i++)
+        std::string res = str;
+        res[0] = toupper(res[0]);
+        for (size_t i = 1; i < res.size(); i++)
         {
-            result[i] = tolower(result[i]);
+            res[i] = tolower(res[i]);
         }
-        // return result;
-        return result;
+        return res;
     }
 
     std::string Upper(const std::string &str) noexcept
     {
-        // Replace code here
-        std::string result = str;
-        for (int i = 0; i < result.length(); i++)
+        std::string res = str;
+        for (size_t i = 0; i < res.size(); i++)
         {
-            result[i] = toupper(result[i]);
+            res[i] = toupper(res[i]);
         }
-
-        return result;
+        return res;
     }
 
     std::string Lower(const std::string &str) noexcept
     {
-        // Replace code here
-        std::string result = str;
-        for (int i = 0; i < result.length(); i++)
+        std::string res = str;
+        for (size_t i = 0; i < str.size(); i++)
         {
-            result[i] = tolower(result[i]);
+            res[i] = tolower(res[i]);
         }
-        return result;
+        return res;
     }
 
     std::string LStrip(const std::string &str) noexcept
     {
-        // Replace code here
-        // for this one
-        std::string result = str;
-        for (int i = 0; i < result.length(); i++)
+        auto i = 0;
+        while (str[i] == ' ')
         {
-            if (result[i] != ' ')
-            {
-                result = result.substr(i);
-                break;
-            }
+            i++;
         }
-        return result;
+        return str.substr(i);
     }
 
     std::string RStrip(const std::string &str) noexcept
     {
-        // Replace code here
-        std::string result = str;
-        for (int i = result.length() - 1; i >= 0; i--)
+        auto i = str.length() - 1;
+        while (i >= 0 && str[i] == ' ')
         {
-            if (result[i] != ' ')
-            {
-                result = result.substr(0, i + 1);
-                break;
-            }
+            i--;
         }
-        return result;
+        int len = i + 1;
+        return str.substr(0, len);
     }
 
     std::string Strip(const std::string &str) noexcept
     {
-
-        // Replace code here
-        std::string result = str;
-        for (int i = 0; i < result.length(); i++)
+        auto i = 0;
+        while (str[i] == ' ')
         {
-            if (result[i] != ' ')
-            {
-                result = result.substr(i);
-                break;
-            }
+            i++;
         }
-        for (int i = result.length() - 1; i >= 0; i--)
+        auto c = str.length() - 1;
+        while (c >= 0 && str[c] == ' ')
         {
-            if (result[i] != ' ')
-            {
-                result = result.substr(0, i + 1);
-                break;
-            }
+            c--;
         }
-        return result;
+        int len = c - i + 1;
+        return str.substr(i, len);
     }
 
     std::string Center(const std::string &str, int width, char fill) noexcept
     {
-        // Replace code here
-        std::string result = str;
-        int leftWidth = (width - result.length()) / 2;
-        int rightWidth = (width - result.length()) / 2;
-        if ((width - result.length()) % 2 != 0)
+        std::string res = str;
+        int leftspace = (width - str.length()) / 2; // had to add this first part b/c of failed tests
+        int rightspace = (width - str.length()) / 2;
+        if ((width - str.length()) % 2 != 0)
         {
-            rightWidth++;
-        }
-        for (int i = 0; i < leftWidth; i++)
-        {
-            result = fill + result;
-        }
-        for (int i = 0; i < rightWidth; i++)
-        {
-            result = result + fill;
+            rightspace = rightspace + 1;
         }
 
-        return result;
+        for (int i = 0; i < leftspace; i++)
+        {
+            res = fill + res;
+        }
+        for (int i = 0; i < rightspace; i++)
+        {
+            res = res + fill;
+        }
+        return res;
     }
 
     std::string LJust(const std::string &str, int width, char fill) noexcept
     {
-        // Replace code here
-        std::string result = str;
-        width = width - result.length();
-        for (int i = 0; i < width; i++)
+        std::string res = str;
+        int ind = width - str.length();
+        for (int i = 0; i < ind; i++)
         {
-            result = result + fill;
+            res = res + fill;
         }
-        return result;
+        return res;
     }
 
     std::string RJust(const std::string &str, int width, char fill) noexcept
     {
-        // Replace code here
-        std::string result = str;
-        width = width - result.length();
-        for (int i = 0; i < width; i++)
+        std::string res = str;
+        int ind = width - str.length();
+        for (int i = 0; i < ind; i++)
         {
-            result = fill + result;
+            res = fill + res;
         }
-        return result;
+        return res;
     }
 
     std::string Replace(const std::string &str, const std::string &old, const std::string &rep) noexcept
     {
-        std::string result = str;
-        auto temp = str.find(old);
-        while (temp != std::string::npos)
+        std::string res = str;
+        auto ind = str.find(old);
+        while (ind != std::string::npos)
         {
-            std::string before_old = result.substr(0, temp);
-            std::string after_old = result.substr(temp + old.length());
-            result = result.substr(0, temp) + rep + result.substr(temp + old.length());
-            temp = result.find(old);
+            res = res.replace(ind, old.length(), rep);
+            ind = res.find(old);
         }
-        return result;
+        return res;
     }
+
     std::vector<std::string> Split(const std::string &str, const std::string &splt) noexcept
     {
         std::vector<std::string> v; // Vector store stringds
@@ -216,17 +188,16 @@ namespace StringUtils
 
     std::string Join(const std::string &str, const std::vector<std::string> &vect) noexcept
     {
-        std::string result = vect[0];
+        std::string res = vect[0];
         for (size_t i = 1; i < vect.size(); i++)
         {
-            result += str + vect[i];
+            res += str + vect[i];
         }
-        return result;
+        return res;
     }
 
     std::string ExpandTabs(const std::string &str, int tabsize) noexcept
     {
-
         std::string res;
         size_t curr = 0;
         if (tabsize == 0)
@@ -319,4 +290,4 @@ namespace StringUtils
         // this is the distance between the two strings
         return distance[leftSize][rightSize];
     }
-}
+};
