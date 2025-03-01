@@ -80,16 +80,27 @@ struct CXMLWriter::SImplementation
     }
     bool FinalizeOutput()
     {
-        for (auto temps = std::make_reverse_iterator(DElementList.end()); temps != std::make_reverse_iterator(DElementList.begin()); ++temps)
+        for (auto temps = std::make_reverse_iterator(DElementList.end());
+             temps != std::make_reverse_iterator(DElementList.begin()); ++temps)
         {
-            if (!OutputString("</") && !OutputString(">") && !OutputString(*temps))
+            // Ensure ALL parts of the closing tag are written correctly
+            if (!OutputString("</"))
+            {
+                return false;
+            }
+            if (!OutputString(*temps))
+            {
+                return false;
+            }
+            if (!OutputString(">"))
             {
                 return false;
             }
         }
-        DElementList.clear(); // clear the stack here adn return true
+        DElementList.clear();
         return true;
     }
+    
 
     // writes the provided XML entity to the output.
     bool OutputEntity(const SXMLEntity &entity)
@@ -118,7 +129,7 @@ struct CXMLWriter::SImplementation
             break;
 
         case SXMLEntity::EType::EndElement:
-            // write the closing tag for the element.
+            // wclose the tag write it
             if (!OutputString("</") || !OutputString(entity.DNameData) || !OutputString(">"))
             {
                 return false;
